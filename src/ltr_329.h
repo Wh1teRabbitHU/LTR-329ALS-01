@@ -42,6 +42,12 @@
 #define LTR_329_MEASUREMENT_RATE_1000MS			0b100
 #define LTR_329_MEASUREMENT_RATE_2000MS			0b101
 
+#define LTR_329_DATA_STATUS_OLD					0b000
+#define LTR_329_DATA_STATUS_NEW					0b001
+
+#define LTR_329_DATA_VALID						0b000
+#define LTR_329_DATA_INVALID					0b001
+
 typedef struct LTR_329_measurement {
 	uint16_t channel0;
 	uint16_t channel1;
