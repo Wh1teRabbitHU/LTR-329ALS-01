@@ -59,22 +59,50 @@ typedef struct LTR_329_status {
 	uint8_t gain;
 } LTR_329_status;
 
+void LTR_329_init();
 void LTR_329_init(TwoWire *wire);
 
+uint8_t LTR_329_readControl();
 uint8_t LTR_329_readControl(TwoWire *wire);
-void LTR_329_writeControl(TwoWire *wire, uint8_t value);
-uint8_t LTR_329_readMeasurementRate(TwoWire *wire);
-void LTR_329_writeMeasurementRate(TwoWire *wire, uint8_t value);
-uint8_t LTR_329_readPartID(TwoWire *wire);
-uint8_t LTR_329_readManufacturerID(TwoWire *wire);
-uint16_t LTR_329_readChannel0Data(TwoWire *wire);
-uint16_t LTR_329_readChannel1Data(TwoWire *wire);
-void LTR_329_readStatus(TwoWire *wire, LTR_329_status *status);
 
+void LTR_329_writeControl(uint8_t value);
+void LTR_329_writeControl(TwoWire *wire, uint8_t value);
+
+uint8_t LTR_329_readMeasurementRate();
+uint8_t LTR_329_readMeasurementRate(TwoWire *wire);
+
+void LTR_329_writeMeasurementRate(uint8_t value);
+void LTR_329_writeMeasurementRate(TwoWire *wire, uint8_t value);
+
+uint8_t LTR_329_readPartID();
+uint8_t LTR_329_readPartID(TwoWire *wire);
+
+uint8_t LTR_329_readManufacturerID();
+uint8_t LTR_329_readManufacturerID(TwoWire *wire);
+
+uint16_t LTR_329_readChannel0Data();
+uint16_t LTR_329_readChannel0Data(TwoWire *wire);
+
+uint16_t LTR_329_readChannel1Data();
+uint16_t LTR_329_readChannel1Data(TwoWire *wire);
+
+
+void LTR_329_setGain(uint8_t gain);
 void LTR_329_setGain(TwoWire *wire, uint8_t gain);
+
+void LTR_329_setDeviceMode(uint8_t standby);
 void LTR_329_setDeviceMode(TwoWire *wire, uint8_t standby);
+
+void LTR_329_setIntegrationTime(uint8_t time);
 void LTR_329_setIntegrationTime(TwoWire *wire, uint8_t time);
+
+void LTR_329_setMeasurementRate(uint8_t rate);
 void LTR_329_setMeasurementRate(TwoWire *wire, uint8_t rate);
+
+void LTR_329_readMeasurement(LTR_329_measurement *measurement);
 void LTR_329_readMeasurement(TwoWire *wire, LTR_329_measurement *measurement);
+
+void LTR_329_readStatus(LTR_329_status *status);
+void LTR_329_readStatus(TwoWire *wire, LTR_329_status *status);
 
 #endif /* SRC_LTR_329_H_ */

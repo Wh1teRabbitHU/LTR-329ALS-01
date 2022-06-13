@@ -1,24 +1,18 @@
 #include <Arduino.h>
-#include "Wire.h"
 
 #include "ltr_329.h"
 
-#define I2C_SDA 21
-#define I2C_SCL 22
-
-static TwoWire wire = TwoWire(0);
 static LTR_329_status status = { 0 };
 
 void setup() {
   Serial.begin(9600);
-  wire.begin((int)I2C_SDA, (int)I2C_SCL, (uint32_t)10000);
 
-  LTR_329_init(&wire);
-  LTR_329_setGain(&wire, LTR_329_GAIN_4X);
+  LTR_329_init();
+  LTR_329_setGain(LTR_329_GAIN_4X);
 }
 
 void loop() {
-	LTR_329_readStatus(&wire, &status);
+	LTR_329_readStatus(&status);
 
 	Serial.print("Data is ");
 	Serial.print(status.valid == LTR_329_DATA_VALID ? "valid" : "invalid");

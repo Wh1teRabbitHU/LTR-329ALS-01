@@ -4,6 +4,12 @@ uint8_t getBit(uint8_t binary, uint8_t pos) {
 	return ((binary >> pos) & 1) == 1 ? 1 : 0;
 }
 
+void LTR_329_init() {
+	Wire.begin();
+
+	LTR_329_init(&Wire);
+}
+
 void LTR_329_init(TwoWire *wire) {
 	uint8_t controlValue = 0;
 	uint8_t retryCount = 0;
@@ -21,12 +27,78 @@ void LTR_329_init(TwoWire *wire) {
 	LTR_329_setDeviceMode(wire, LTR_329_ACTIVE_MODE);
 }
 
+uint8_t LTR_329_readControl() {
+	return LTR_329_readControl(&Wire);
+}
+
 uint8_t LTR_329_readControl(TwoWire *wire) {
 	return I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_CONTR_ADDR);
 }
 
+void LTR_329_writeControl(uint8_t value) {
+	LTR_329_writeControl(&Wire, value);
+}
+
 void LTR_329_writeControl(TwoWire *wire, uint8_t value) {
 	I2C_8Bit_writeToModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_CONTR_ADDR, value);
+}
+
+uint8_t LTR_329_readMeasurementRate() {
+	return LTR_329_readMeasurementRate(&Wire);
+}
+
+uint8_t LTR_329_readMeasurementRate(TwoWire *wire) {
+	return I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_MEAS_RATE_ADDR);
+}
+
+void LTR_329_writeMeasurementRate(uint8_t value) {
+	LTR_329_writeMeasurementRate(&Wire, value);
+}
+
+void LTR_329_writeMeasurementRate(TwoWire *wire, uint8_t value) {
+	I2C_8Bit_writeToModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_MEAS_RATE_ADDR, value);
+}
+
+uint8_t LTR_329_readPartID() {
+	return LTR_329_readPartID(&Wire);
+}
+
+uint8_t LTR_329_readPartID(TwoWire *wire) {
+	return I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_PART_ID_ADDR);
+}
+
+uint8_t LTR_329_readManufacturerID() {
+	return LTR_329_readManufacturerID(&Wire);
+}
+
+uint8_t LTR_329_readManufacturerID(TwoWire *wire) {
+	return I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_MANUFACTURER_ID_ADDR);
+}
+
+uint16_t LTR_329_readChannel0Data() {
+	return LTR_329_readChannel0Data(&Wire);
+}
+
+uint16_t LTR_329_readChannel0Data(TwoWire *wire) {
+	uint16_t ch00Data = I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_DATA_CH0_0_ADDR);
+	uint16_t ch01Data = I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_DATA_CH0_1_ADDR);
+
+	return ch00Data + (ch01Data << 8);
+}
+
+uint16_t LTR_329_readChannel1Data() {
+	return LTR_329_readChannel1Data(&Wire);
+}
+
+uint16_t LTR_329_readChannel1Data(TwoWire *wire) {
+	uint16_t ch10Data = I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_DATA_CH1_0_ADDR);
+	uint16_t ch11Data = I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_DATA_CH1_1_ADDR);
+
+	return ch10Data + (ch11Data << 8);
+}
+
+void LTR_329_setGain(uint8_t gain) {
+	LTR_329_setGain(&Wire, gain);
 }
 
 void LTR_329_setGain(TwoWire *wire, uint8_t gain) {
@@ -39,6 +111,10 @@ void LTR_329_setGain(TwoWire *wire, uint8_t gain) {
 	LTR_329_writeControl(wire, controlValue);
 }
 
+void LTR_329_setDeviceMode(uint8_t standby) {
+	LTR_329_setDeviceMode(&Wire, standby);
+}
+
 void LTR_329_setDeviceMode(TwoWire *wire, uint8_t standby) {
 	uint8_t controlValue = LTR_329_readControl(wire);
 
@@ -47,34 +123,8 @@ void LTR_329_setDeviceMode(TwoWire *wire, uint8_t standby) {
 	LTR_329_writeControl(wire, controlValue);
 }
 
-uint8_t LTR_329_readMeasurementRate(TwoWire *wire) {
-	return I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_MEAS_RATE_ADDR);
-}
-
-void LTR_329_writeMeasurementRate(TwoWire *wire, uint8_t value) {
-	I2C_8Bit_writeToModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_MEAS_RATE_ADDR, value);
-}
-
-uint8_t LTR_329_readPartID(TwoWire *wire) {
-	return I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_PART_ID_ADDR);
-}
-
-uint8_t LTR_329_readManufacturerID(TwoWire *wire) {
-	return I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_MANUFACTURER_ID_ADDR);
-}
-
-uint16_t LTR_329_readChannel0Data(TwoWire *wire) {
-	uint16_t ch00Data = I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_DATA_CH0_0_ADDR);
-	uint16_t ch01Data = I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_DATA_CH0_1_ADDR);
-
-	return ch00Data + (ch01Data << 8);
-}
-
-uint16_t LTR_329_readChannel1Data(TwoWire *wire) {
-	uint16_t ch10Data = I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_DATA_CH1_0_ADDR);
-	uint16_t ch11Data = I2C_8Bit_readFromModule(wire, LTR_329_I2C_ADDR, LTR_329_REG_DATA_CH1_1_ADDR);
-
-	return ch10Data + (ch11Data << 8);
+void LTR_329_setIntegrationTime(uint8_t time) {
+	LTR_329_setIntegrationTime(&Wire, time);
 }
 
 void LTR_329_setIntegrationTime(TwoWire *wire, uint8_t time) {
@@ -85,6 +135,10 @@ void LTR_329_setIntegrationTime(TwoWire *wire, uint8_t time) {
 	rateValue = I2C_8Bit_setBinary(rateValue, 5, GET_BIT_VALUE(time, 2));
 
 	LTR_329_writeMeasurementRate(wire, rateValue);
+}
+
+void LTR_329_setMeasurementRate(uint8_t rate) {
+	LTR_329_setMeasurementRate(&Wire, rate);
 }
 
 void LTR_329_setMeasurementRate(TwoWire *wire, uint8_t rate) {
@@ -101,9 +155,21 @@ void LTR_329_setMeasurementRate(TwoWire *wire, uint8_t rate) {
  * The order of the read, matters! The sensor will lock the registers until it reads the last address.
  * When the code reads 0x8B (LTR_329_REG_DATA_CH0_1_ADDR), the lock will be removed from the sensor!
  */
+void LTR_329_readMeasurement(LTR_329_measurement *measurement) {
+	LTR_329_readMeasurement(&Wire, measurement);
+}
+
+/**
+ * The order of the read, matters! The sensor will lock the registers until it reads the last address.
+ * When the code reads 0x8B (LTR_329_REG_DATA_CH0_1_ADDR), the lock will be removed from the sensor!
+ */
 void LTR_329_readMeasurement(TwoWire *wire, LTR_329_measurement *measurement) {
 	measurement->channel1 = LTR_329_readChannel1Data(wire);
 	measurement->channel0 = LTR_329_readChannel0Data(wire);
+}
+
+void LTR_329_readStatus(LTR_329_status *status) {
+	LTR_329_readStatus(&Wire, status);
 }
 
 void LTR_329_readStatus(TwoWire *wire, LTR_329_status *status) {
